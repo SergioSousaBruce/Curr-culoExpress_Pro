@@ -24,6 +24,9 @@ const TEMPLATES = [
 
 function App() {
   const [data, setData] = useState<ResumeData>(INITIAL_RESUME_DATA);
+  // Separate state for skills input to allow typing commas and spaces freely
+  const [rawSkills, setRawSkills] = useState(""); 
+  
   const [isGeneratingAI, setIsGeneratingAI] = useState(false);
   
   // Tab State: 'content' | 'design'
@@ -50,6 +53,8 @@ function App() {
         ...EXAMPLE_RESUME_DATA,
         config: data.config // Keep current design choice
       });
+      // Sync raw skills text with example data
+      setRawSkills(EXAMPLE_RESUME_DATA.skills.join(', '));
     }
   };
 
@@ -59,6 +64,7 @@ function App() {
         ...INITIAL_RESUME_DATA,
         config: data.config
       });
+      setRawSkills("");
     }
   };
 
@@ -193,7 +199,10 @@ function App() {
 
   // Skills
   const handleSkillsChange = (text: string) => {
-    const skillsArray = text.split(',').map(s => s.trim()).filter(s => s);
+    setRawSkills(text); // Update input field immediately to allow typing
+    
+    // Process for preview (filter out empty strings to avoid empty badges)
+    const skillsArray = text.split(',').map(s => s.trim()).filter(s => s.length > 0);
     setData(prev => ({ ...prev, skills: skillsArray }));
   };
 
@@ -216,16 +225,22 @@ function App() {
 
   const generatePDF = async () => {
     setIsDownloading(true);
-    const input = document.getElementById('resume-preview');
+    
+    // Attempt to find the desktop preview first
+    let input = document.getElementById('resume-preview');
+    
+    // If desktop preview is hidden (e.g., on mobile), fallback to mobile preview
+    if (!input || input.offsetParent === null) {
+       input = document.getElementById('resume-preview-mobile');
+    }
+
     if (!input) {
+        alert("Erro: Não foi possível localizar o currículo para gerar o PDF.");
         setIsDownloading(false);
         return;
     }
 
     try {
-      // Temporarily force opacity to 1 and scale to 1 for capture
-      const originalStyle = input.getAttribute('style');
-      
       const canvas = await html2canvas(input, {
         scale: 3, // Higher scale for better quality
         useCORS: true,
@@ -574,7 +589,7 @@ function App() {
                        rows={4}
                        className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-pink-500/20 focus:border-pink-500 outline-none resize-none text-sm bg-white text-gray-900"
                        onChange={(e) => handleSkillsChange(e.target.value)}
-                       defaultValue={data.skills.join(', ')}
+                       value={rawSkills} // Use raw state
                      />
                      <p className="text-xs text-gray-400 mt-2 flex items-center gap-1"><Check size={12} /> Separe cada habilidade por vírgula.</p>
                    </div>

@@ -54,7 +54,7 @@ const ModernTemplate: React.FC<ResumePreviewProps> = ({ data, id }) => {
 
   return (
     <div id={id} className="w-full bg-white shadow-2xl mx-auto overflow-hidden relative text-gray-800 font-sans" style={{ width: '210mm', minHeight: '297mm', padding: '0' }}>
-      <div className="flex h-full min-h-[297mm]">
+      <div className="flex h-full min-h-[297mm] items-stretch">
         {/* Sidebar - LIGHT VERSION */}
         <div className="w-[32%] bg-gray-50 text-gray-800 flex flex-col border-r border-gray-200">
           
@@ -122,7 +122,7 @@ const ModernTemplate: React.FC<ResumePreviewProps> = ({ data, id }) => {
           
           {/* Header */}
           <div className="mb-8 pb-6 border-b border-gray-100">
-             <h1 className="text-4xl font-bold uppercase tracking-tight text-slate-900" style={{color: config.color}}>{personalInfo.fullName || 'Seu Nome'}</h1>
+             <h1 className="text-4xl font-bold uppercase tracking-tight text-slate-900">{personalInfo.fullName || 'Seu Nome'}</h1>
              <h2 className="text-xl text-slate-500 font-medium mt-1 tracking-wide">{personalInfo.jobTitle || 'Cargo Desejado'}</h2>
           </div>
 
@@ -281,7 +281,7 @@ const MinimalTemplate: React.FC<ResumePreviewProps> = ({ data, id }) => {
       {/* Header Left Aligned */}
       <div className="flex justify-between items-start mb-10">
          <div>
-            <h1 className="text-5xl font-extrabold tracking-tight text-slate-900 mb-2" style={{color: config.color}}>{personalInfo.fullName || 'Nome'}</h1>
+            <h1 className="text-5xl font-extrabold tracking-tight text-slate-900 mb-2">{personalInfo.fullName || 'Nome'}</h1>
             <h2 className="text-2xl font-light text-slate-400">{personalInfo.jobTitle || 'Cargo'}</h2>
          </div>
          <div className="text-right text-xs font-medium text-slate-500 space-y-1">
@@ -336,7 +336,7 @@ const MinimalTemplate: React.FC<ResumePreviewProps> = ({ data, id }) => {
            
            {personalInfo.photo && (
               <div className="mb-6">
-                 <img src={personalInfo.photo} alt="Profile" className="w-full h-auto object-cover rounded-lg grayscale opacity-90 hover:grayscale-0 transition duration-500" />
+                 <img src={personalInfo.photo} alt="Profile" className="w-full h-auto object-cover rounded-lg shadow-sm" />
               </div>
            )}
 
